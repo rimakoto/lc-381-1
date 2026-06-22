@@ -4,7 +4,6 @@ import PlayerArea from "@/components/PlayerArea";
 import ResultDisplay from "@/components/ResultDisplay";
 import StatisticsPanel from "@/components/StatisticsPanel";
 import DeckResetMessage from "@/components/DeckResetMessage";
-import { RefreshCw } from "lucide-react";
 
 export default function Home() {
   const {
@@ -48,7 +47,7 @@ export default function Home() {
         <p className="text-white/60 text-xs sm:text-sm mt-1">
           {phase === "player1_turn" && "🎯 玩家 1 请点击牌堆抽牌"}
           {phase === "player2_turn" && "🎯 玩家 2 请点击牌堆抽牌"}
-          {phase === "result" && "✨ 本轮结束，点击下方按钮开始新一局"}
+          {phase === "result" && "✨ 本轮结束，点击弹窗中的按钮开始新一局"}
         </p>
       </header>
 
@@ -106,28 +105,19 @@ export default function Home() {
             />
           </div>
         </div>
-
-        {/* 新一局按钮 - 固定在游戏区域下方，始终可见 */}
-        <div className="flex-shrink-0 py-2">
-          {phase === "result" && (
-            <button
-              onClick={startNewRound}
-              className="animate-bounce-in glass-button px-8 py-3 rounded-full text-white font-bold flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-200 shadow-lg shadow-black/20"
-            >
-              <RefreshCw size={18} />
-              新一局
-            </button>
-          )}
-        </div>
       </main>
 
-      {/* 底部统计面板 - 确保内容多时可滚动 */}
+      {/* 底部统计面板 */}
       <footer className="px-3 pb-3 sm:pb-5 pt-1 flex-shrink-0">
         <StatisticsPanel />
       </footer>
 
-      {/* 结果展示 */}
-      <ResultDisplay result={result} visible={phase === "result"} />
+      {/* 结果展示 - 包含新一局按钮，居中固定定位 */}
+      <ResultDisplay
+        result={result}
+        visible={phase === "result"}
+        onNewRound={startNewRound}
+      />
     </div>
   );
 }
