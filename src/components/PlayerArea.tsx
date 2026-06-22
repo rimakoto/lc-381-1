@@ -8,6 +8,7 @@ interface PlayerAreaProps {
   isWinner: boolean;
   isFlipping: boolean;
   position: "left" | "right";
+  flyDirection?: "left" | "right" | "top" | "bottom" | null;
 }
 
 export default function PlayerArea({
@@ -17,6 +18,7 @@ export default function PlayerArea({
   isWinner,
   isFlipping,
   position,
+  flyDirection = null,
 }: PlayerAreaProps) {
   return (
     <div
@@ -41,18 +43,26 @@ export default function PlayerArea({
         {playerName}
       </div>
 
-      {/* 扑克牌 */}
-      <div className="relative">
+      {/* 扑克牌容器 - 加高亮效果 */}
+      <div className={`relative ${isActive ? "player-active-glow p-1" : ""}`}>
         <PlayingCard
           card={card}
           isFlipping={isFlipping}
           isWinner={isWinner}
           size="large"
+          flyDirection={flyDirection}
         />
 
         {/* 胜利光环效果 */}
         {isWinner && (
           <div className="absolute inset-0 -m-4 rounded-3xl border-2 border-poker-gold/50 animate-pulse pointer-events-none" />
+        )}
+
+        {/* 当前玩家指示箭头 */}
+        {isActive && (
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="text-poker-gold text-2xl">▼</div>
+          </div>
         )}
       </div>
     </div>

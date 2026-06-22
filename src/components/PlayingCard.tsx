@@ -7,6 +7,7 @@ interface PlayingCardProps {
   isFlipping?: boolean;
   isWinner?: boolean;
   size?: "small" | "medium" | "large";
+  flyDirection?: "left" | "right" | "top" | "bottom" | null;
 }
 
 export default function PlayingCard({
@@ -14,21 +15,29 @@ export default function PlayingCard({
   isFlipping = false,
   isWinner = false,
   size = "large",
+  flyDirection = null,
 }: PlayingCardProps) {
   const [showFront, setShowFront] = useState(false);
+  const [prevCardId, setPrevCardId] = useState<string | null>(null);
 
   useEffect(() => {
     if (card && isFlipping) {
+      setShowFront(false);
       const timer = setTimeout(() => {
         setShowFront(true);
-      }, 300);
+      }, 350);
+      setPrevCardId(card.id);
       return () => clearTimeout(timer);
     } else if (card) {
-      setShowFront(true);
+      if (card.id !== prevCardId) {
+        setShowFront(true);
+      }
+      setPrevCardId(card.id);
     } else {
       setShowFront(false);
+      setPrevCardId(null);
     }
-  }, [card, isFlipping]);
+  }, [card, isFlipping, prevCardId]);
 
   const sizeClasses = {
     small: "w-20 h-28 sm:w-24 sm:h-32",
@@ -41,6 +50,15 @@ export default function PlayingCard({
     medium: { value: "text-xl", suit: "text-2xl", center: "text-4xl" },
     large: { value: "text-2xl", suit: "text-3xl", center: "text-6xl" },
   };
+
+  const flyInClass = isFlipping && flyDirection
+    ? {
+        left: "fly-in-left",
+        right: "fly-in-right",
+        top: "fly-in-top",
+        bottom: "fly-in-bottom",
+      }[flyDirection]
+    : "";
 
   if (!card) {
     return (
@@ -55,20 +73,26 @@ export default function PlayingCard({
   const suitSymbol = SUIT_SYMBOLS[card.suit];
   const suitColor = SUIT_COLORS[card.suit];
 
+  const shouldUsePreserve3d = isFlipping && flyDirection;
+
   return (
     <div
       className={`perspective-1000 ${sizeClasses[size]} ${
         isWinner ? "animate-glow-gold" : ""
-      } ${isFlipping ? "animate-bounce-in" : ""}`}
+      } ${flyInClass}`}
     >
       <div
-        className={`relative w-full h-full preserve-3d transition-transform duration-600 ${
-          showFront ? "rotate-y-180" : ""
-        }`}
+        className={`relative w-full h-full ${shouldUsePreserve3d ? "" : "preserve-3d"} ${
+          isFlipping && !flyDirection ? "transition-transform duration-700" : ""
+        } ${
+          !isFlipping && showFront ? "rotate-y-180" : ""
+        } ${flyDirection ? "" : showFront ? "rotate-y-180" : ""}`}
       >
         {/* 背面 */}
         <div
-          className={`absolute inset-0 rounded-xl card-back-pattern bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 border-4 border-white/80 card-shadow backface-hidden flex items-center justify-center`}
+          className={`absolute inset-0 rounded-xl card-back-pattern bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 border-4 border-white/80 card-shadow backface-hidden flex items-center justify-center ${
+            flyInClass && !showFront ? "opacity-100" : ""
+          }`}
         >
           <div className="absolute inset-2 rounded-lg border-2 border-white/20" />
           <div className="text-white/40 text-4xl font-bold font-display select-none">

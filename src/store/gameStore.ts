@@ -14,7 +14,8 @@ interface GameStore {
   player2Card: Card | null;
   phase: GamePhase;
   result: GameResult;
-  isFlipping: boolean;
+  player1Flipping: boolean;
+  player2Flipping: boolean;
   deckResetMessage: boolean;
   statistics: Statistics;
   drawPlayer1Card: () => void;
@@ -31,7 +32,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   player2Card: null,
   phase: "player1_turn",
   result: null,
-  isFlipping: false,
+  player1Flipping: false,
+  player2Flipping: false,
   deckResetMessage: false,
   statistics: initialStats,
 
@@ -49,7 +51,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { card, newDeck } = drawCard(currentDeck);
 
     set({
-      isFlipping: true,
+      player1Flipping: true,
     });
 
     setTimeout(() => {
@@ -57,7 +59,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         deck: newDeck,
         player1Card: card,
         phase: "player2_turn",
-        isFlipping: false,
+        player1Flipping: false,
         deckResetMessage: resetShown,
       }));
 
@@ -66,7 +68,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           set({ deckResetMessage: false });
         }, 2000);
       }
-    }, 600);
+    }, 700);
   },
 
   drawPlayer2Card: () => {
@@ -85,7 +87,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { card, newDeck } = drawCard(currentDeck);
 
     set({
-      isFlipping: true,
+      player2Flipping: true,
     });
 
     setTimeout(() => {
@@ -112,7 +114,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           player2Card: card,
           phase: "result",
           result,
-          isFlipping: false,
+          player2Flipping: false,
           deckResetMessage: resetShown,
           statistics: newStats,
         };
@@ -123,7 +125,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           set({ deckResetMessage: false });
         }, 2000);
       }
-    }, 600);
+    }, 700);
   },
 
   startNewRound: () => {
@@ -144,6 +146,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       result: null,
       deck: currentDeck,
       deckResetMessage: resetShown,
+      player1Flipping: false,
+      player2Flipping: false,
     });
 
     if (resetShown) {

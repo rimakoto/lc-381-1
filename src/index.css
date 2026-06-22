@@ -31,7 +31,11 @@ body {
       #0a3a2d 100%
     );
   background-attachment: fixed;
-  overflow: hidden;
+}
+
+#root {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .perspective-1000 {
@@ -121,4 +125,119 @@ body {
   animation: confetti-fall 3s ease-in-out forwards;
   pointer-events: none;
   z-index: 100;
+}
+
+@keyframes flyInFromRight {
+  0% {
+    transform: translateX(100%) translateY(20%) scale(0.6) rotateY(0deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateX(10%) translateY(-5%) scale(1.05) rotateY(90deg);
+  }
+  100% {
+    transform: translateX(0) translateY(0) scale(1) rotateY(180deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flyInFromLeft {
+  0% {
+    transform: translateX(-100%) translateY(20%) scale(0.6) rotateY(0deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateX(-10%) translateY(-5%) scale(1.05) rotateY(90deg);
+  }
+  100% {
+    transform: translateX(0) translateY(0) scale(1) rotateY(180deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flyInFromBottom {
+  0% {
+    transform: translateY(100%) translateX(20%) scale(0.6) rotateY(0deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(10%) translateX(-5%) scale(1.05) rotateY(90deg);
+  }
+  100% {
+    transform: translateY(0) translateX(0) scale(1) rotateY(180deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flyInFromTop {
+  0% {
+    transform: translateY(-100%) translateX(20%) scale(0.6) rotateY(0deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-10%) translateX(-5%) scale(1.05) rotateY(90deg);
+  }
+  100% {
+    transform: translateY(0) translateX(0) scale(1) rotateY(180deg);
+    opacity: 1;
+  }
+}
+
+.fly-in-right {
+  animation: flyInFromRight 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.fly-in-left {
+  animation: flyInFromLeft 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.fly-in-bottom {
+  animation: flyInFromBottom 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.fly-in-top {
+  animation: flyInFromTop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes playerHighlight {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 6px rgba(212, 175, 55, 0.4);
+  }
+}
+
+.player-active-glow {
+  animation: playerHighlight 1.5s ease-in-out infinite;
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
